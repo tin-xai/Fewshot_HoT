@@ -1,6 +1,9 @@
 .DS_Store
 configs/keys.py
 utils/__pycache__/
+
+data/data/
+
 utils/one_step_to_two_step.py
 
 utils/vis_fs/
