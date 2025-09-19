@@ -23,7 +23,7 @@ def get_common_args() -> argparse.ArgumentParser:
 Examples:
   python main.py --dataset commonsenseQA --answer_mode hot --temperature 0.7 --n_runs 3
   python main.py --dataset medQA --answer_mode ltm --num_samples 100 --save_answer
-  python main.py --dataset GSM8K --answer_mode cot --n_runs 1 --num_samples 1 --save_answer
+  python main.py --dataset GSM8K --answer_mode cot --n_runs 1 --num_samples 1 --save_answer --max_threads 8
         """
     )
     
