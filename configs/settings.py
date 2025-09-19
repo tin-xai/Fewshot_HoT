@@ -39,7 +39,7 @@ class Config:
             return 'results_self_refine'
         else:
             # Default folder for standard modes (da, cot, hot)
-            return 'results_ifbench'
+            return 'results'
     
     def _build_save_path(self) -> str:
         """Build the complete save path for results."""
