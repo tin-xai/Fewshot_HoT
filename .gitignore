@@ -1,5 +1,5 @@
 .DS_Store
-utils/keys.py
+configs/keys.py
 utils/__pycache__/
 utils/one_step_to_two_step.py
 
