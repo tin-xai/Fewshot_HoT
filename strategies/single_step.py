@@ -7,19 +7,23 @@ class SingleStepStrategy(BaseStrategy):
         super().__init__(config)
         self.prompt_builder = PromptBuilder(config)
     
-    def execute(self, questions, ids, run_number):
+    def execute(self, questions, ids, few_shot_prompt, run_number, tail=""):
         answers = []
         for question, id in zip(questions, ids):
-            response = self.generate_response(question, self.config.args.dataset)
+            response = self.generate_response(question, self.config.args.dataset, few_shot_prompt, tail)
+            print(response)
             if response:
                 answers.append(response)
         return answers
     
-    def generate_response(self, question, dataset):
+    def generate_response(self, question, dataset, few_shot_prompt, tail=""):
         prompt = self.prompt_builder.create_prompt(
             question, 
             dataset, 
             self.config.args.prompt_used,
-            self.config.args.answer_mode
+            few_shot_prompt,
+            self.config.args.answer_mode,
+            tail
         )
+    
         return api_agent(self.llm_model, prompt, temperature=self.temperature)

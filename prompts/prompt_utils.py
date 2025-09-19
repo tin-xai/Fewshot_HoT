@@ -10,9 +10,9 @@ def extract_last_sentence(question, dataset):
     elif dataset == 'spartQA':
         return ""
     else:
-        sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', text)
+        sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', question)
         # Return the last sentence after stripping any extra spaces.
-        return sentences[-1].strip() if sentences else text    
+        return sentences[-1].strip() if sentences else question    
 
 def remove_fact_tags_from_answers(prompt):
     return re.sub(

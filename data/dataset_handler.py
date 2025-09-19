@@ -1,5 +1,5 @@
 import pandas as pd
-from load_dataset import DatasetLoader
+from data.load_dataset import DatasetLoader
 
 class DatasetManager:
     def __init__(self, config):
@@ -21,9 +21,9 @@ class DatasetManager:
         
         return questions, ids
     
-    def load_few_shot_prompt(self, answer_mode, tail=""):
+    def load_few_shot_prompt(self, answer_mode):
         if answer_mode in ['ltm', 'ltm_hot', 'tot', 'cove', 'cove_hot', 'self_refine']:
             return ""
         
-        prompt = self.dataloader._load_few_shot_prompt(fs_mode=answer_mode)
-        return self._apply_tail_transformations(prompt, tail)
+        return self.dataloader._load_few_shot_prompt(fs_mode=answer_mode)
+        

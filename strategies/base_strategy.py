@@ -7,9 +7,9 @@ class BaseStrategy(ABC):
         self.temperature = config.args.temperature
     
     @abstractmethod
-    def execute(self, questions, ids, run_number):
+    def execute(self, questions, ids, few_shot_prompt, run_number, tail=""):
         pass
     
     @abstractmethod
-    def generate_response(self, question, dataset):
+    def generate_response(self, question, dataset, few_shot_prompt, tail=""):
         pass

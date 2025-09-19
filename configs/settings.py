@@ -50,17 +50,11 @@ class Config:
         str_temperature = str(self.args.temperature).replace('.', '')
         
         # Add additional suffixes based on configuration
-        tail = self._get_tail_suffix()
+        tail = self.args.tail
         save_path = base_path[:-4] + f'_temp_{str_temperature}_{self.args.data_mode}{tail}.csv'
         
         return save_path
-    
-    def _get_tail_suffix(self) -> str:
-        """Get the tail suffix for experimental variations."""
-        # This can be modified based on experimental needs
-        # Current implementation returns empty string, but can be extended
-        # for variations like '_only_ground_A', '_only_ground_Q', '_repeat_Q', etc.
-        return ''
+
     
     def _setup_experiment_settings(self):
         """Setup experiment-specific settings."""
