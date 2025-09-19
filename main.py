@@ -11,6 +11,7 @@ from typing import List, Tuple
 from configs.settings import Config
 from data.dataset_handler import DatasetManager
 from strategies.strategy_factory import StrategyFactory
+from prompts.prompt_builder import PromptBuilder
 
 
 def get_common_args() -> argparse.ArgumentParser:
@@ -20,9 +21,9 @@ def get_common_args() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python main.py --dataset GSM8K --answer_mode cot --llm_model gpt-4o-2024-08-06
   python main.py --dataset commonsenseQA --answer_mode hot --temperature 0.7 --n_runs 3
   python main.py --dataset medQA --answer_mode ltm --num_samples 100 --save_answer
+  python main.py --dataset GSM8K --answer_mode cot --n_runs 1 --num_samples 1 --save_answer
         """
     )
     
@@ -30,7 +31,7 @@ Examples:
     arg_parser.add_argument(
         '--llm_model', 
         type=str, 
-        default='gemini-1.5-pro-002', 
+        default='gemini-1.5-flash-002', 
         help='The language model to query',
         choices=[
             'gemini-1.5-pro-002', 'gemini-1.5-flash-002', 'claude', 
@@ -129,6 +130,14 @@ Examples:
         help='Save individual answers and questions to CSV files'
     )
     
+    arg_parser.add_argument(
+        '--tail', 
+        type=str, 
+        default='', 
+        choices=['', '_only_ground_Q', '_only_ground_A', '_repeat_Q', '_random_tag_Q'],
+        help='The tail to use for the experiment'
+    )
+    
     # Debug and Development Options
     arg_parser.add_argument(
         '--debug', 
@@ -162,61 +171,54 @@ def print_experiment_info(config: Config):
 
 def run_experiment(config: Config) -> bool:
     """Run the main evaluation experiment."""
-    try:
-        # Setup directories
-        config.ensure_directories()
-        
-        # Initialize dataset manager
-        print("Loading dataset...")
-        dataset_manager = DatasetManager(config)
-        questions, ids = dataset_manager.load_data()
-        
-        if not questions:
-            print("Error: No questions loaded from dataset")
-            return False
-        
-        print(f"Loaded {len(questions)} questions")
-        
-        # Initialize strategy
-        print("Initializing evaluation strategy...")
-        strategy = StrategyFactory.create_strategy(config)
-        
-        if not strategy:
-            print("Error: Failed to create evaluation strategy")
-            return False
-        
-        # Load few-shot prompts if needed
-        few_shot_prompt = ""
-        if config.needs_few_shot_prompt():
-            print("Loading few-shot prompts...")
-            few_shot_prompt = dataset_manager.load_few_shot_prompt(config.args.answer_mode)
-        
-        # Run experiments
-        print(f"Starting evaluation with {config.args.n_runs} run(s)...")
-        
-        for run in range(1, config.args.n_runs + 1):
-            print(f"\n--- Run {run}/{config.args.n_runs} ---")
-            
-            save_path = config.get_save_path_for_run(run)
-            print(f"Results will be saved to: {save_path}")
-            
-            success = strategy.execute(questions, ids, few_shot_prompt, run, save_path)
-            
-            if success:
-                print(f"Run {run} completed successfully")
-            else:
-                print(f"Run {run} failed")
-                return False
-        
-        print("\nAll runs completed successfully!")
-        return True
-        
-    except Exception as e:
-        print(f"Error during experiment execution: {str(e)}")
-        if config.args.debug:
-            import traceback
-            traceback.print_exc()
+    
+    # Setup directories
+    config.ensure_directories()
+    
+    # Initialize dataset manager
+    print("Loading dataset...")
+    dataset_manager = DatasetManager(config)
+    questions, ids = dataset_manager.load_data()
+    
+    if not questions:
+        print("Error: No questions loaded from dataset")
         return False
+    
+    print(f"Loaded {len(questions)} questions")
+    
+    # Initialize strategy
+    print("Initializing evaluation strategy...")
+    strategy = StrategyFactory.create_strategy(config)
+    
+    if not strategy:
+        print("Error: Failed to create evaluation strategy")
+        return False
+    
+    # Load few-shot prompts if needed
+    few_shot_prompt = ""
+    if config.needs_few_shot_prompt():
+        print("Loading few-shot prompts...")
+        few_shot_prompt = dataset_manager.load_few_shot_prompt(config.args.answer_mode)
+    
+    # Run experiments
+    print(f"Starting evaluation with {config.args.n_runs} run(s)...")
+    
+    for run in range(1, config.args.n_runs + 1):
+        print(f"\n--- Run {run}/{config.args.n_runs} ---")
+        
+        save_path = config.get_save_path_for_run(run)
+        print(f"Results will be saved to: {save_path}")
+        
+        success = strategy.execute(questions, ids, few_shot_prompt, run, tail=config.args.tail)
+        
+        if success:
+            print(f"Run {run} completed successfully")
+        else:
+            print(f"Run {run} failed")
+            return False
+    
+    print("\nAll runs completed successfully!")
+    return True
 
 
 def main():

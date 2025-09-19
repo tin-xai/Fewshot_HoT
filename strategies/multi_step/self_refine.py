@@ -26,7 +26,7 @@ class SelfRefineStrategy(BaseStrategy):
         self.max_refinement_rounds = getattr(config.args, 'max_refinement_rounds', 2)
         self.critique_required = getattr(config.args, 'critique_required', True)
     
-    def generate_response(self, question: str, dataset: str) -> Optional[str]:
+    def generate_response(self, question: str, dataset: str, few_shot_prompt: str = "", tail: str = "") -> Optional[str]:
         """Generate response using Self-Refine prompting."""
         try:
             # Step 1: Generate initial answer
@@ -164,7 +164,7 @@ class SelfRefineIterativeStrategy(BaseStrategy):
             'accuracy', 'completeness', 'clarity', 'logic', 'methodology'
         ]
     
-    def generate_response(self, question: str, dataset: str) -> Optional[str]:
+    def generate_response(self, question: str, dataset: str, few_shot_prompt: str = "", tail: str = "") -> Optional[str]:
         """Generate response using iterative Self-Refine with aspect-specific critique."""
         try:
             # Step 1: Generate initial answer

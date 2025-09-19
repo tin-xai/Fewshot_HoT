@@ -27,7 +27,7 @@ class ChainOfVerificationStrategy(BaseStrategy):
         self.num_verification_questions = getattr(config.args, 'num_verification_questions', 3)
         self.revision_required = getattr(config.args, 'revision_required', True)
     
-    def generate_response(self, question: str, dataset: str) -> Optional[str]:
+    def generate_response(self, question: str, dataset: str, few_shot_prompt: str = "", tail: str = "") -> Optional[str]:
         """Generate response using Chain-of-Verification prompting."""
         try:
             # Step 1: Generate initial answer
@@ -232,7 +232,7 @@ class ChainOfVerificationHoTStrategy(BaseStrategy):
         super().__init__(config)
         self.num_verification_questions = getattr(config.args, 'num_verification_questions', 3)
     
-    def generate_response(self, question: str, dataset: str) -> Optional[str]:
+    def generate_response(self, question: str, dataset: str, few_shot_prompt: str = "", tail: str = "") -> Optional[str]:
         """Generate response using CoVE with HoT grounding."""
         try:
             # Step 1: Generate reformatted question with fact tags

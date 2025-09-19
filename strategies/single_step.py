@@ -7,14 +7,6 @@ class SingleStepStrategy(BaseStrategy):
         super().__init__(config)
         self.prompt_builder = PromptBuilder(config)
     
-    def execute(self, questions, ids, few_shot_prompt, run_number, tail=""):
-        answers = []
-        for question, id in zip(questions, ids):
-            response = self.generate_response(question, self.config.args.dataset, few_shot_prompt, tail)
-            print(response)
-            if response:
-                answers.append(response)
-        return answers
     
     def generate_response(self, question, dataset, few_shot_prompt, tail=""):
         prompt = self.prompt_builder.create_prompt(

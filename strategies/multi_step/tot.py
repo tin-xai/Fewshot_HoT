@@ -27,7 +27,7 @@ class TreeOfThoughtStrategy(BaseStrategy):
         self.num_paths = getattr(config.args, 'num_paths', 3)
         self.evaluation_required = getattr(config.args, 'evaluation_required', True)
     
-    def generate_response(self, question: str, dataset: str) -> Optional[str]:
+    def generate_response(self, question: str, dataset: str, few_shot_prompt: str = "", tail: str = "") -> Optional[str]:
         """Generate response using Tree-of-Thought prompting."""
         try:
             # Step 1: Generate multiple reasoning paths
@@ -194,7 +194,7 @@ class TreeOfThoughtIterativeStrategy(BaseStrategy):
         self.max_depth = getattr(config.args, 'max_depth', 2)
         self.branching_factor = getattr(config.args, 'branching_factor', 2)
     
-    def generate_response(self, question: str, dataset: str) -> Optional[str]:
+    def generate_response(self, question: str, dataset: str, few_shot_prompt: str = "", tail: str = "") -> Optional[str]:
         """Generate response using iterative Tree-of-Thought."""
         try:
             # Start with initial reasoning paths

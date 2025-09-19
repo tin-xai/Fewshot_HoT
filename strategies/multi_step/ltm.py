@@ -25,7 +25,7 @@ class LeastToMostStrategy(BaseStrategy):
         super().__init__(config)
         self.max_sub_questions = config.args.get('max_sub_questions', 3)
     
-    def generate_response(self, question: str, dataset: str) -> Optional[str]:
+    def generate_response(self, question: str, dataset: str, few_shot_prompt: str = "", tail: str = "") -> Optional[str]:
         """Generate response using Least-to-Most prompting."""
         try:
             # Step 1: Decompose the question
@@ -194,7 +194,7 @@ class LeastToMostHoTStrategy(BaseStrategy):
         super().__init__(config)
         self.max_sub_questions = config.args.get('max_sub_questions', 3)
     
-    def generate_response(self, question: str, dataset: str) -> Optional[str]:
+    def generate_response(self, question: str, dataset: str, few_shot_prompt: str = "", tail: str = "") -> Optional[str]:
         """Generate response using LtM with HoT grounding."""
         try:
             # Step 1: Create reformatted question with tags and decompose
