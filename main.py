@@ -91,7 +91,7 @@ Examples:
     arg_parser.add_argument(
         '--base_data_path', 
         type=str, 
-        default='data', 
+        default='data/data/', 
         help='The base directory for dataset files'
     )
     
