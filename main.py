@@ -158,6 +158,13 @@ Examples:
         help='Maximum samples to process in debug mode'
     )
     
+    arg_parser.add_argument(
+        '--max_threads', 
+        type=int, 
+        default=4, 
+        help='Maximum number of threads for parallel processing (default: 4)'
+    )
+    
     return arg_parser
 
 def print_experiment_info(config: Config):
