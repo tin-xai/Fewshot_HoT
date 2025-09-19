@@ -119,7 +119,6 @@ class Config:
         return [
             'gemini-1.5-pro-002', 'gemini-1.5-flash-002', 'claude', 'gpt-4o-2024-08-06',
             'gpt-4o-mini-2024-07-18', 'llama_transformer', 'llama_groq', 'llama_together',
-            'llama_sambanova_70b', 'llama_sambanova_8b', 'llama_sambanova_405b',
             'qwen25_coder_32b', 'qwq_32b', 'deepseek_r1', 'gemini_thinking',
             'nebius_llama70b', 'nebius_llama405b'
         ]

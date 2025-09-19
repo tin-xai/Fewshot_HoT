@@ -1,4 +1,6 @@
-from utils.keys import API_KEYS
+import sys
+sys.path.append('..')
+from configs.keys import API_KEYS
 # gemini
 import google.generativeai as genai
 from google.generativeai.types import RequestOptions

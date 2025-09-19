@@ -35,8 +35,6 @@ Examples:
         choices=[
             'gemini-1.5-pro-002', 'gemini-1.5-flash-002', 'claude', 
             'gpt-4o-2024-08-06', 'gpt-4o-mini-2024-07-18', 
-            'llama_transformer', 'llama_groq', 'llama_together',
-            'llama_sambanova_70b', 'llama_sambanova_8b', 'llama_sambanova_405b',
             'qwen25_coder_32b', 'qwq_32b', 'deepseek_r1', 'gemini_thinking',
             'nebius_llama70b', 'nebius_llama405b'
         ]
@@ -153,37 +151,6 @@ Examples:
     
     return arg_parser
 
-
-def validate_args(args) -> bool:
-    """Validate argument combinations and values."""
-    errors = []
-    
-    # Validate temperature range
-    if not (0.0 <= args.temperature <= 2.0):
-        errors.append("Temperature must be between 0.0 and 2.0")
-    
-    # Validate batch request compatibility
-    if args.batch_request and 'gpt' not in args.llm_model:
-        errors.append("Batch requests are currently only supported for GPT models")
-    
-    # Validate multi-step modes
-    multi_step_modes = ['ltm', 'ltm_hot', 'tot', 'cove', 'cove_hot', 'self_refine']
-    if args.answer_mode in multi_step_modes and args.prompt_used != 'fs_inst':
-        print(f"Warning: Multi-step mode '{args.answer_mode}' typically works best with 'fs_inst' prompting")
-    
-    # Validate file paths exist
-    if not os.path.exists(args.base_data_path):
-        errors.append(f"Base data path does not exist: {args.base_data_path}")
-    
-    if errors:
-        print("Argument validation errors:")
-        for error in errors:
-            print(f"  - {error}")
-        return False
-    
-    return True
-
-
 def print_experiment_info(config: Config):
     """Print information about the current experiment setup."""
     print("=" * 60)
@@ -257,10 +224,6 @@ def main():
     # Parse arguments
     arg_parser = get_common_args()
     args = arg_parser.parse_args()
-    
-    # Validate arguments
-    if not validate_args(args):
-        sys.exit(1)
     
     # Initialize configuration
     config = Config(args)
