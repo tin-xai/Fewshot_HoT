@@ -72,7 +72,6 @@ python visualize.py --llm_model "$llm_model" --dataset "$dataset" --answer_mode 
 ```bash
 python visualize.py --llm_model "gpt-4o-2024-08-06" --dataset "GSM8K" --answer_mode "cot" --data_mode --save_html
 ```
-![Example Figure](figures/example2.png)
 
 # 5. License
 MIT
