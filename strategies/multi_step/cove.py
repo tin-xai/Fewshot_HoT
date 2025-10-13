@@ -89,7 +89,6 @@ Initial Answer:"""
             self.llm_model,
             initial_prompt,
             temperature=self.temperature,
-            max_tokens=self.max_tokens
         )
     
     def _create_verification_questions(self, question: str, initial_answer: str) -> Optional[str]:
@@ -111,8 +110,7 @@ Verification Questions:
         return api_agent(
             self.llm_model,
             verification_prompt,
-            temperature=self.temperature,
-            max_tokens=self.max_tokens
+            temperature=self.temperature
         )
     
     def _extract_verification_questions(self, response: str) -> List[str]:
@@ -147,8 +145,7 @@ Answer to verification question {i+1}:"""
             verif_answer = api_agent(
                 self.llm_model,
                 verif_prompt,
-                temperature=self.temperature,
-                max_tokens=self.max_tokens
+                temperature=self.temperature
             )
             
             if verif_answer is not None:
@@ -188,7 +185,6 @@ Revised Final Answer:"""
             self.llm_model,
             revision_prompt,
             temperature=self.temperature,
-            max_tokens=self.max_tokens
         )
     
     def _compile_full_response(self, initial_answer: str, verification_questions_response: str,
@@ -302,7 +298,6 @@ Reformatted Question: [question with <fact1></fact1>, <fact2></fact2>, <fact3></
             self.llm_model,
             reformat_prompt,
             temperature=self.temperature,
-            max_tokens=self.max_tokens
         )
     
     def _extract_reformatted_question(self, response: str) -> str:
@@ -327,7 +322,6 @@ Initial Answer:"""
             self.llm_model,
             initial_prompt,
             temperature=self.temperature,
-            max_tokens=self.max_tokens
         )
     
     def _create_verification_questions_with_grounding(self, reformatted_question: str,
@@ -351,8 +345,20 @@ Verification Questions:
             self.llm_model,
             verification_prompt,
             temperature=self.temperature,
-            max_tokens=self.max_tokens
         )
+    
+    def _extract_verification_questions(self, response: str) -> List[str]:
+        """Extract verification questions from the response."""
+        verification_questions = []
+        
+        for line in response.split('\n'):
+            line = line.strip()
+            if re.match(r'^\d+\.', line):
+                question_text = re.sub(r'^\d+\.\s*', '', line).strip()
+                if question_text and len(question_text) > 10:
+                    verification_questions.append(question_text)
+        
+        return verification_questions[:self.num_verification_questions]
     
     def _answer_verification_questions_with_grounding(self, reformatted_question: str,
                                                     initial_answer: str,
@@ -375,7 +381,6 @@ Answer to verification question {i+1}:"""
                 self.llm_model,
                 verif_prompt,
                 temperature=self.temperature,
-                max_tokens=self.max_tokens
             )
             
             if verif_answer is not None:
@@ -409,7 +414,6 @@ Revised Final Answer:"""
             self.llm_model,
             revision_prompt,
             temperature=self.temperature,
-            max_tokens=self.max_tokens
         )
     
     def _compile_full_response_hot(self, reformatted_response: str, reformatted_question: str,

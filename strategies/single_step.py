@@ -17,5 +17,5 @@ class SingleStepStrategy(BaseStrategy):
             self.config.args.answer_mode,
             tail
         )
-    
+        
         return api_agent(self.llm_model, prompt, temperature=self.temperature)

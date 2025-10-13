@@ -23,7 +23,7 @@ def get_common_args() -> argparse.ArgumentParser:
 Examples:
   python main.py --dataset commonsenseQA --answer_mode hot --temperature 0.7 --n_runs 3
   python main.py --dataset medQA --answer_mode ltm --num_samples 100 --save_answer
-  python main.py --dataset GSM8K --answer_mode cot --n_runs 1 --num_samples 1 --save_answer --max_threads 8
+  python main.py --dataset GSM8K --answer_mode cot --n_runs 1 --num_samples 1 --save_answer --max_threads 8 --llm_model gemini-2.0-flash-001
         """
     )
     
@@ -34,9 +34,9 @@ Examples:
         default='gemini-1.5-flash-002', 
         help='The language model to query',
         choices=[
-            'gemini-1.5-pro-002', 'gemini-1.5-flash-002', 'claude', 
+            'gemini-2.0-flash-001', 'claude', 
             'gpt-4o-2024-08-06', 'gpt-4o-mini-2024-07-18', 
-            'qwen25_coder_32b', 'qwq_32b', 'deepseek_r1', 'gemini_thinking',
+            'qwen25_coder_32b', 'qwq_32b', 'deepseek_r1',
             'nebius_llama70b', 'nebius_llama405b'
         ]
     )
@@ -59,7 +59,7 @@ Examples:
     arg_parser.add_argument(
         '--data_mode', 
         type=str, 
-        default='longest', 
+        default='full', 
         help='How to select data samples',
         choices=['full', 'random', 'longest', 'shortest', 'remain']
     )

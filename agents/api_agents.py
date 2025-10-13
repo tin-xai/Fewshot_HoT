@@ -18,13 +18,9 @@ from google.api_core import retry
 # claude
 import anthropic
 # llama
-import groq
-from together import Together
 # gpt4
 from openai import OpenAI
 import openai
-
-from together import Together
 
 import random, time
 from tqdm import tqdm

@@ -1,7 +1,7 @@
 from .single_step import SingleStepStrategy
 from .multi_step.tot import TreeOfThoughtStrategy
 from .multi_step.ltm import LeastToMostStrategy
-from .multi_step.cove import ChainOfVerificationStrategy
+from .multi_step.cove import ChainOfVerificationStrategy, ChainOfVerificationHoTStrategy
 from .multi_step.self_refine import SelfRefineStrategy
 
 class StrategyFactory:
@@ -17,6 +17,8 @@ class StrategyFactory:
             return ChainOfVerificationStrategy(config)
         elif config.args.answer_mode == 'self_refine':
             return SelfRefineStrategy(config)
+        elif config.args.answer_mode == 'cove_hot':
+            return ChainOfVerificationHoTStrategy(config)
         else:
             raise ValueError(f"Unknown answer mode: {config.args.answer_mode}")
 
